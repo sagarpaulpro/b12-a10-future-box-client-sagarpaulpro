@@ -6,19 +6,23 @@ import Root from './layouts/Root'
 import Home from './pages/Home/Home'
 import Login from './pages/Login/Login'
 import Register from './pages/Register/Register'
+import AuthProvider from './contexts/AuthContext/AuthProvider'
 
 const router = createBrowserRouter([
-  {path: '/', Component: Root,
-    children:[
-      { index: true, Component: Home},
-      { path: '/login', Component: Login},
-      { path: '/register', Component: Register},
+  {
+    path: '/', Component: Root,
+    children: [
+      { index: true, Component: Home },
+      { path: '/login', Component: Login },
+      { path: '/register', Component: Register },
     ]
   }
 ])
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <RouterProvider router={router}></RouterProvider>
+    <AuthProvider>
+      <RouterProvider router={router}></RouterProvider>
+    </AuthProvider>
   </StrictMode>,
 )
