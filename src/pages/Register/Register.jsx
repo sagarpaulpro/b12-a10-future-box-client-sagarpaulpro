@@ -1,14 +1,12 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Mail, Lock, User, Image, LogIn, ChevronRight } from 'lucide-react';
-import { FcGoogle } from 'react-icons/fc'; // For Google icon
+import { FcGoogle } from 'react-icons/fc'; 
+import { AuthContext } from '../../contexts/AuthContext/AuthContext';
 
-// --- 💡 পাসওয়ার্ড ভ্যালিডেশনের জন্য রেগুলার এক্সপ্রেশন ---
-// ১. কমপক্ষে ৬ ক্যারেক্টার দৈর্ঘ্য (.{6,})
-// ২. কমপক্ষে একটি বড় হাতের অক্ষর (?=.*[A-Z])
-// ৩. কমপক্ষে একটি ছোট হাতের অক্ষর (?=.*[a-z])
 const PASSWORD_REGEX = /^(?=.*[A-Z])(?=.*[a-z]).{6,}$/;
 
 const Register = () => {
+  const {createUser,loginWithGoogle} = useContext(AuthContext);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [photoURL, setPhotoURL] = useState('');
@@ -34,7 +32,7 @@ const Register = () => {
     setLoading(true);
     setErrorMessage('');
     setShowToast(null);
-
+    createUser(email,password).then(result => console.log(result.user)).catch(error => console.log(error))
     // ১. ক্লায়েন্ট-সাইড পাসওয়ার্ড ভ্যালিডেশন
     if (!PASSWORD_REGEX.test(password)) {
       setErrorMessage(passwordErrorText);
@@ -69,6 +67,7 @@ const Register = () => {
   
   const handleGoogleLogin = () => {
     console.log("Logging in with Google...");
+    loginWithGoogle().then(result=>console.log(result)).catch(error=>console.log(error))
   };
 
   return (

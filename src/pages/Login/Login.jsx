@@ -1,43 +1,58 @@
-import React, { useState } from 'react';
-import { Mail, Lock, LogIn } from 'lucide-react'; // Using lucide-react for modern icons
+import React, { useState, useContext } from 'react';
+import { Mail, Lock, LogIn } from 'lucide-react';
+import { AuthContext } from '../../contexts/AuthContext/AuthContext';
+import { FcGoogle } from 'react-icons/fc';
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
 
+  const { loginUser, loginWithGoogle } = useContext(AuthContext);
+
   const handleSubmit = (e) => {
     e.preventDefault();
     setLoading(true);
-    // 💡 Add your actual login logic here
-    console.log('Attempting login with:', { email, password });
-    
-    // Simulate API call delay
-    setTimeout(() => {
-      setLoading(false);
-      // Example: If successful, redirect or show success message
-      // Example: If failed, show error message
-    }, 2000); 
+
+    loginUser(email, password)
+      .then((result) => {
+        console.log("Login Success:", result.user);
+      })
+      .catch((error) => {
+        console.log("Login Error:", error);
+      })
+      .finally(() => setLoading(false));
+  };
+
+  const handleGoogleLogin = () => {
+    setLoading(true);
+
+    loginWithGoogle()
+      .then((result) => {
+        console.log("Google Login Success:", result.user);
+      })
+      .catch((error) => {
+        console.log("Google Login Error:", error);
+      })
+      .finally(() => setLoading(false));
   };
 
   return (
     <div className="min-h-screen bg-base-200 flex items-center justify-center p-4">
       <div className="card w-full max-w-4xl shadow-2xl bg-base-100 flex flex-col md:flex-row">
-        
-        {/* --- 🖼️ Left Section: Informational/Image (Desktop Only) --- */}
+
         <div className="hidden md:flex md:w-1/2 bg-cover w-full rounded-l-2xl items-center justify-center">
-          <img className='bg-cover ml-0 rounded-l-xl relative  right-6' src="https://www.summahealth.org/-/media/project/summahealth/website/page-content/flourish/2_18a_fl_fastfood_400x400.webp?la=en&h=400&w=400&hash=145DC0CF6234A159261389F18A36742A" alt='food picture'/>
+          <img
+            className='bg-cover ml-0 rounded-l-xl relative right-6'
+            src="https://www.summahealth.org/-/media/project/summahealth/website/page-content/flourish/2_18a_fl_fastfood_400x400.webp?la=en&h=400&w=400&hash=145DC0CF6234A159261389F18A36742A"
+            alt='food'
+          />
         </div>
 
-        {/* --- 📝 Right Section: Login Form --- */}
         <div className="w-full md:w-1/2 p-6 sm:p-10">
-          <h1 className="text-3xl font-bold text-center mb-6 text-primary">
-            Sign In
-          </h1>
-          
+          <h1 className="text-3xl font-bold text-center mb-6 text-primary">Sign In</h1>
+
           <form onSubmit={handleSubmit} className="space-y-4" autoComplete='off'>
-            
-            {/* Email Input */}
             <div className="form-control">
               <label className="label">
                 <span className="label-text flex items-center gap-1">
@@ -56,7 +71,6 @@ const LoginPage = () => {
               </label>
             </div>
 
-            {/* Password Input */}
             <div className="form-control">
               <label className="label">
                 <span className="label-text flex items-center gap-1">
@@ -78,12 +92,9 @@ const LoginPage = () => {
               </label>
             </div>
 
-            
-            
-            {/* Submit Button */}
             <div className="form-control mt-6">
-              <button 
-                type="submit" 
+              <button
+                type="submit"
                 className={`btn btn-primary btn-block ${loading ? 'btn-disabled' : ''}`}
                 disabled={loading}
               >
@@ -99,11 +110,20 @@ const LoginPage = () => {
                 )}
               </button>
             </div>
-            
-            {/* Signup/Register Link */}
+
+            <div className="form-control">
+              <button
+                type="button"
+                onClick={handleGoogleLogin}
+                className="btn btn-outline btn-block"
+              >
+                <FcGoogle className="w-6 h-6" /> Login with Google
+              </button>
+            </div>
+
             <div className="text-center mt-4">
               <p className="text-sm text-base-content/70">
-                Don't have an account? 
+                Don't have an account?
                 <a href="/register" className="link link-primary ml-1 font-semibold">
                   Sign Up
                 </a>
@@ -111,6 +131,7 @@ const LoginPage = () => {
             </div>
           </form>
         </div>
+
       </div>
     </div>
   );
