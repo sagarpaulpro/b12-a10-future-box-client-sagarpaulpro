@@ -21,7 +21,13 @@ const AddFoods = () => {
     };
 
     console.log(formData);
-
+     fetch('http://localhost:3000/addfood',{
+      method: 'POST',
+      headers: {
+        'content-type':'application/json'},
+      body: JSON.stringify(formData)
+    })
+    
     // Optionally, reset form
     setFoodName("");
     setFoodImage("");
