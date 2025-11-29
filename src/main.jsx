@@ -13,17 +13,19 @@ import ManageFoods from './pages/Manage Foods/ManageFoods'
 import FoodRequests from './pages/Food Request/FoodRequests'
 import Private from './layouts/Private'
 
+
 const router = createBrowserRouter([
   {
-    path: '/', Component: Root,
+    path: '/',
+    element: <Root />,
     children: [
-      { index: true, Component: Home },
-      { path: '/login', Component: Login },
-      { path: '/register', Component: Register },
-      { path: '/profile', Component: Profile },
-      { path: '/add', element: <Private><AddFoods/></Private> },
-      { path: '/manage', element:<Private><ManageFoods/></Private>},
-      { path: '/request', element: <Private><FoodRequests/></Private>},
+      { index: true,path: "/home", element: <Home /> },
+      { path: '/login', element: <Login /> },
+      { path: '/register', element: <Register /> },
+      { path: '/profile', element: <Profile /> },
+      { path: '/add', element: <Private><AddFoods /></Private> },
+      { path: '/manage', element: <Private><ManageFoods /></Private> },
+      { path: '/request', element: <Private><FoodRequests /></Private> },
     ]
   }
 ])
